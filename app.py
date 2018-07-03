@@ -9,7 +9,7 @@ from models import db
 # 这是 SQLAlchemy 的机制
 from models.todo import Todo
 from models.user import User
-
+from models.task import Task
 
 app = Flask(__name__)
 manager = Manager(app)
@@ -59,6 +59,9 @@ def register_routes(app):
 
     from routes.user import main as routes_user
     app.register_blueprint(routes_user, url_prefix='/user')
+
+    from routes.task import main as routes_task
+    app.register_blueprint(routes_task, url_prefix='/task')
 
 
 # 自定义的命令行命令用来运行服务器

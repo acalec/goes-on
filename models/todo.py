@@ -20,6 +20,6 @@ class Todo(db.Model, ModelMixin):
         self.task = form.get('task', '')
         self.created_time = int(time.time())
 
-    def update(self, form):
+    def _update(self, form):
         self.task = form.get('task', '')
         self.save()

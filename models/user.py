@@ -22,7 +22,7 @@ class User(db.Model, ModelMixin):
 
     # 验证注册用户的合法性
     def valid(self):
-        valid_username = self.valid_username()
+        valid_username = self.valid_username(self.username)
         valid_username_len = len(self.username) >= 6
         valid_password_len = len(self.password) >= 6
         msgs = []

@@ -13,7 +13,6 @@ def index():
     return render_template('todo_index.html', todo_list=ms)
 
 
-
 @main.route('/edit/<id>')
 def edit(id):
     m = Model.query.get(id)
