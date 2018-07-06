@@ -63,6 +63,9 @@ def register_routes(app):
     from routes.task import main as routes_task
     app.register_blueprint(routes_task, url_prefix='/task')
 
+    from routes.task import main as routes_task
+    app.register_blueprint(routes_task, url_prefix='/')
+
 
 # 自定义的命令行命令用来运行服务器
 @manager.command
