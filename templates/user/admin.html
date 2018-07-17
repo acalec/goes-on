@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>admin</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="btn btn-primary btn-sm">
+
+</div>
+{% for u in user_list %}
+
+
+<p class="bg-info " style="font-size:30px">
+    <label>id:</label>
+    {{ u.id }}
+    <label>username:</label>{{ u.username }}  <label>password:</label>{{ u.password }}
+    <button class="gua-show-comment btn-primary btn-sm" onClick="location.href='{{ url_for('.edit', id=u.id) }}'">
+        修改
+    </button>
+    <button class="gua-show-comment btn-primary btn-sm" onClick="location.href='{{ url_for('.delete', id=u.id) }}'">
+        删除
+    </button>
+</p>
+{% endfor %}
+</body>
+</html>

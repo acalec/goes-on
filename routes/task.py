@@ -3,6 +3,7 @@ from routes import *
 from utils import log
 import json
 import datetime, calendar
+from routes.user import current_user
 
 main = Blueprint('task', __name__)
 
@@ -22,7 +23,10 @@ def cal_list():
 
 @main.route('/')
 def index():
-    ms = Model.query.all()
+    u = current_user()
+    ms = Model.query.filter_by(user_id=u.id).all()
+    print(u,ms)
+    # ms = Model.query.all()
     weeks, m, y = cal_list()
     # format_weeks = list(map())
 

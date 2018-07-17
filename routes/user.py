@@ -33,11 +33,24 @@ def random_string():
 def index():
     u = current_user()
     if u is not None:
-        return redirect(url_for('weibo.index'))
+        return redirect(url_for('task.index'))
     ms = Model.query.all()
     xfrs = random_string()
     xfrs_dict[xfrs] = 0
     return render_template('user/index.html', xfrs=xfrs, user_list=ms)
+
+
+def login_check(func):
+    def wrapper(id):
+        u = current_user()
+        print(u)
+        if u is None:
+            return redirect(url_for('task.index'))
+        else:
+            func(id)
+            # return func
+
+    return wrapper
 
 
 @main.route('/login', methods=['POST'])
@@ -51,13 +64,14 @@ def login():
         u.status = 1
         u.save()
         print('login successful', u.status)
-        return redirect(url_for('weibo.index'))
+        return redirect(url_for('task.index'))
     else:
         print('login unsuccessful')
         return redirect(url_for('.index'))
 
 
 @main.route('/edit/<id>')
+@login_check
 def edit(id):
     m = Model.query.get(id)
     return render_template('user/edit.html', user=m)

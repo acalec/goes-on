@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>趣推</title>
+  <link href="/static/css/style.css" rel="stylesheet" type="text/css"/>
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/alertify.min.js"></script>
+  <script src="/static/js/jquery-3.0.0.min.js"></script>
+  <script src="/static/js/weibo.js"></script>
+  <script>
+    let log = function() {
+      console.log(arguments);
+    }
+    var upload = function(file) {
+      // 要用一个 formdata 对象来装 file
+      var fd = new FormData();
+      fd.append('uploaded', file);
+
+      log(fd);
+      $.ajax({
+        url: '/upload',
+        method: 'post',
+        // 上传文件的时候下面这两个选项一定要加上
+        contentType: false,
+        processData: false,
+        data: fd,
+        success: function(r) {
+          console.log('上传成功', file.name);
+        },
+        error: function() {
+          console.log('上传失败', file.name);
+        }
+      });
+    };
+
+    $(document).ready(function() {
+      $('#id-button-upload').on('click', function() {
+        var fileTag = $('#id-input-file')[0];
+        var files = fileTag.files;
+        var numberOfFiles = files.length;
+        if (numberOfFiles == 0) {
+          alert('还没有选中文件');
+        } else {
+          for (var i = 0; i < numberOfFiles; i++) {
+            var file = files[i];
+            console.log('上传的文件: ', file.name);
+            <!--upload(file);-->
+          }
+        }
+      });
+    });
+  </script>
+  <style>
+    #background1 {
+      background-image: url(/static/img/backgroundimg.jpg);
+      /*background-position: right bottom, left top;*/
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+      /*padding: 15px;*/
+    }
+
+    .gua-hide {
+      display: none;
+    }
+  </style>
+</head>
+
+<body class="post-template-default single single-post postid-576 single-format-standard">
+  <div id="page" class="site">
+    <div id="background1"  >
+
+    <div class="weibo-container">
+
+      <header role="banner">
+        <div class="  masthead-group clearfix container">
+          <div>
+            <a class="comment-author " href={{ url_for( 'weibo.myweibo', id=user_single.id ) }} title="我的微博">
+        <img  id="id-avatar-weibo"  src="/static/img/uploads/{{ user_single.id }}/{{ user_single.avatar }}"  class="img-circle" width="80px" height="80px" alt="我的微博">
+        <h1>
+        <p id="id-username-weibo">
+          {{ user_single.username }}
+        </p>
+        </h1>
+        <h4>war never changes</h4>
+        </a>
+          </div>
+
+          <nav class="pull-right" role="navigation">
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+              <ul id="menu-menu-1" class="nav navbar-nav">
+                <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-283">
+                  <a style="font-size:20px;color:white" href='{{ url_for('weibo.index') }}'>首页</a></li>
+                <li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-181 current_page_item menu-item-401 active">
+                  <a style="font-size:20px;color:white" href='{{ url_for('user.profile', id= user_single.id ) }}'>个人中心</a></li>
+                <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-402">
+                  <a style="font-size:20px;color:white" href='{{ url_for('weibo.myweibo', id= user_single.id ) }}'>我的微博</a></li>
+                <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-403">
+                  <a style="font-size:20px;color:white" href='{{ url_for('weibo.mycollect' ) }}'>收藏</a></li>
+                <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-403">
+                  <a style="font-size:20px;color:white" href='{{ url_for('weibo.followed' ) }}'>关注</a></li>
+                <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-403">
+                  <a style="font-size:20px;color:white" href='{{ url_for('user.quit' ) }}'>退出</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </header>
+
+
+
+
+      <div id="container" class="container">
+        <div id="primary" style="margin-bottom: 230px;" class="row right_side">
+
+
+          <div id="content" role="main" class="image-comment-on col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <div class="entry-container box clearfix  ">
+
+
+              <div>
+                <img src="/static/img/uploads/{{ user_single.id }}/{{ user_single.avatar }}" class="img-circle" width="110px" height="110" />
+                <br><br>
+                <form action="{{ url_for('.upload', id=user_single.id) }}" method="post" enctype=multipart/form-data>
+                  <label>
+          <input type="file" name="uploaded">
+      </label>
+                  <br>
+                  <button type="submit" class="btn btn-primary btn-sm">
+       上传头像
+      </button>
+                </form>
+              </div>
+
+              <div>
+                <p>
+                  <h3>用户id:</h3> {{ user_single.id }} <br>
+                  <h3>用户名:</h3> {{ user_single.username }} <br>
+                  <br>
+                  <button class="btn btn-primary btn-sm" onClick="location.href='{{ url_for('.edit', id=user_single.id) }}'">修改用户名</button>
+                  <button class="btn btn-primary btn-sm" onClick="location.href='{{ url_for('weibo.index') }}'">返回微博</button>
+
+                </p>
+                <br><br>
+
+
+
+
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+        </div>
+    <script>
+      document.getElementById("upfile").value = Math.random().toString(36).substr(2);
+    </script>
+</body>
+
+</html>

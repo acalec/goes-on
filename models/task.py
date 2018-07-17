@@ -16,6 +16,7 @@ class Task(db.Model, ModelMixin):
     status = db.Column(db.String())
     status_list = db.Column(db.String())
     belonging = db.Column(db.String())
+    user_id = db.Column(db.String())
     # 这是一个外键
     # user_id = db.Column(db.Integer, db.ForeignKey('stb_users.id'))
     # # relationship
@@ -32,6 +33,7 @@ class Task(db.Model, ModelMixin):
         self.user_id = form.get("user_id", '')
         self.created_time = int(time.time())
         self.updated_time = int(time.time())
+        self.user_id = form.get("user_id", '')
 
     def _update(self, form):
         self.task = form.get('status_list', '')

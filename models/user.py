@@ -1,7 +1,7 @@
 import time
 
-from models.message import Message
-from models import red
+from models.task import Task
+# from models import red
 from . import ModelMixin
 from . import db
 
@@ -15,10 +15,7 @@ class User(db.Model, ModelMixin):
     avatar = db.Column(db.Text)
     followed = db.Column(db.Text)
     follower = db.Column(db.Text)
-    weibo_collect = db.Column(db.Text)
     status = db.Column(db.Integer)
-    weibos = db.relationship('Weibo', backref='user')
-    comments = db.relationship('Comment', backref='user')
 
     def __init__(self, form):
         self.role = form.get('role', 10)
@@ -40,19 +37,6 @@ class User(db.Model, ModelMixin):
         else:
             avatar_path = "/static/img/uploads/" + str(self.id) + "/" + str(self.avatar)
             return avatar_path
-
-    def check_message(self):
-        messages = Message.query.filter_by(receiver=self.id, status=0).all()
-        message_count = len(messages)
-        return message_count
-
-    def is_follow(self, id):
-        iff = 'user:follow:{}'.format(self.id)
-        flag = red.zscore(iff, id)
-        if flag is not None:
-            return 1
-        else:
-            return 0
 
     def valid_username(self):
         if User.query.filter_by(username=self.username).first() is None:

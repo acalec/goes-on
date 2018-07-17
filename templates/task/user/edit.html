@@ -6,10 +6,7 @@
 </head>
 <body>
     <form action="{{ url_for('.update', id=user.id) }}" method="post">
-        <h4>用户名<h4>
         <input name="username">
-        <h4>密码<h4>
-        <input name="password">
         <button>update</button>
     </form>
 </body>
