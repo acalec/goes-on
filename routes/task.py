@@ -1,9 +1,10 @@
 from models.task import Task
 from routes import *
-from utils import log
+from utils.utils import log
 import json
 import datetime, calendar
-from routes.user import current_user
+from routes.user import current_user, login_check
+from utils.for_task import sum_lists
 
 main = Blueprint('task', __name__)
 
@@ -23,9 +24,10 @@ def cal_list():
 
 @main.route('/')
 def index():
+    # print("enter task index")
     u = current_user()
     ms = Model.query.filter_by(user_id=u.id).all()
-    print(u,ms)
+    # print(u, ms)
     # ms = Model.query.all()
     weeks, m, y = cal_list()
     # format_weeks = list(map())
@@ -54,10 +56,26 @@ def index():
                 sld[fw] = 0
                 sls.append(0)
         sl_dict[m.id] = sls
+
+    print("sl_dict.values()",type(sl_dict.values()),sl_dict.values())
+    sum_values = sum_lists(list(sl_dict.values()))
+
+    print(sum_values)
+
     # sl_dict = json.dumps(sl_dict)
     # print(sl_dict)
     fw = list(map(lambda x: x[5:], format_weeks))
-    return render_template('task/indexx.html', task_list=ms, weeks=format_weeks, status_lists=sl_dict)
+    return render_template('task/indexx.html', task_list=ms, sum_values=sum_values, user=u, weeks=format_weeks,
+                           status_lists=sl_dict)
+
+
+@main.route('/profile')
+def profile():
+    # print("enter task index")
+    u = current_user()
+    ms = Model.query.filter_by(user_id=u.id).all()
+
+    return render_template('task/profile.html', task_list=ms)
 
 
 @main.route('/edit/<id>')
@@ -68,13 +86,23 @@ def edit(id):
 
 @main.route('/add', methods=['POST'])
 def add():
+    u = current_user()
     form = request.form
-    Model.new(form)
+    m = Model.new(form)
+    m.user_id = u.id
+    m.save()
     return redirect(url_for('.index'))
 
 
 @main.route('/update/<id>', methods=['POST'])
 def update(id):
+    form = request.form
+    Model._update(id, form)
+    return redirect(url_for('.index'))
+
+
+@main.route('/update/target/<id>', methods=['POST'])
+def update_target(id):
     form = request.form
     Model.update(id, form)
     return redirect(url_for('.index'))

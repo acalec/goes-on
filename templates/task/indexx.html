@@ -9,22 +9,25 @@
     <link rel="stylesheet" href="/static/css/bootstrap.min.css" >
     <!--<script src="/static/js/api.js"></script>-->
 
-    <title>Hello, world!</title>
+    <title>◢₄₆Life goes on</title>
   </head>
   <body>
-    <h1>Hello, world!</h1>
+
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="/static/js/bootstrap.min.js"  ></script>
     <div class="container">
-    <div>
-        <form action="{{ url_for('.add') }}" method="post">
+        <div>
+            <h3  align="center"> ◢₄₆ </h3>
+            <h3  align="center"> {{user.username}} </h3>
+         <form style="text-align:center" action="{{ url_for('.add') }}" method="post">
             <input type="text" name="name" placeholder="输入 task">
-            <button>Add</button>
+             <button style="margin-bottom: 5px;" class="btn  btn-sm" >Add</button>
         </form>
-    </div>
+        </div>
 
+     <br><br><br>
 
 
 
@@ -33,7 +36,7 @@
   <thead>
     <tr>
       <th scope="col"   colspan="8">
-        <button class="btn btn-sm btn-info " onClick="location.href='{{ url_for('.index') }}'">
+        <button class="btn btn-secondary active" onClick="location.href='{{ url_for('.index') }}'">
              {{weeks[0][:7]}}
             </button>
        </th>
@@ -44,32 +47,46 @@
   </thead>
   <tbody>
 
-  {% for tl in task_list %}
+  {% for task in task_list %}
     <tr>
        <th scope="row"  colspan="8">
 
-            <button class="btn  btn-sm btn-info  " onClick="location.href='{{ url_for('.go', id=tl.id) }}'">
-             {{tl.name}} +
+            <button class="btn  btn-sm btn-info  " onClick="location.href='{{ url_for('.go', id=task.id) }}'">
+             「{{task.aim}}」{{task.name}}  +
             </button>
-
-
        </th>
 
 
-        {% for sl in status_lists[tl.id] %}
-          <td  >{{ sl }}</td>
+
+        {% for status in status_lists[task.id] %}
+          <td >
+              {{ status }}
+          </td>
         {% endfor %}
+
     </tr>
-
-
-
   {% endfor %}
+        <tr>
+         <th scope="row"  colspan="8">
 
+            {% for sv in sum_values %}
+          <td >
+              {{ sv }}
+          </td>
+        {% endfor %}
+       </th>
+
+
+</tr>
   </tbody>
 </table>
 
-      <button type="button" class="btn btn-primary">Primary</button>
-
+     <button class="btn  btn-sm btn-info  " onClick="location.href='{{ url_for('.profile') }}'">
+             Profile
+     </button>
+    <button class="btn  btn-sm btn-info  " onclick="location.href='{{ url_for('user.quit') }}'" type="button" class="btn btn-primary">
+               Quit
+           </button>
 </div>
 
 

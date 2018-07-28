@@ -62,3 +62,5 @@ def error(request, code=404):
         404: b'HTTP/1.x 404 NOT FOUND\r\n\r\n<h1>NOT FOUND</h1>',
     }
     return e.get(code, b'')
+
+

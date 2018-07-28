@@ -2,13 +2,17 @@ import os
 
 from models.user import User
 from routes import *
-from utils import log
+from utils.utils import log
 
 main = Blueprint('user', __name__)
 
 Model = User
 
 uploads_dir = 'static/img/uploads/'
+
+xfrs_dict = {
+    'd40a58205d884331aa7f2a7304ad6345': 0,
+}
 
 
 def current_user():
@@ -17,11 +21,8 @@ def current_user():
     if uid is not None:
         u = User.query.get(uid)
         return u
-
-
-xfrs_dict = {
-    'd40a58205d884331aa7f2a7304ad6345': 0,
-}
+    else:
+        return None
 
 
 def random_string():
@@ -41,13 +42,13 @@ def index():
 
 
 def login_check(func):
-    def wrapper(id):
+    def wrapper(*arg):
         u = current_user()
-        print(u)
         if u is None:
-            return redirect(url_for('task.index'))
+            return redirect(url_for('user.index'))
         else:
-            func(id)
+            print("username", u.username, u.id)
+            func(*arg)
             # return func
 
     return wrapper
@@ -63,7 +64,7 @@ def login():
         u = current_user()
         u.status = 1
         u.save()
-        print('login successful', u.status)
+        # print('login successful')
         return redirect(url_for('task.index'))
     else:
         print('login unsuccessful')
