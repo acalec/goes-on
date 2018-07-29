@@ -42,31 +42,39 @@ def index():
             format_weeks.append(w)
 
     sl_dict = dict()
-    for m in ms:
+    sum_dict = dict()
+    achieved_dict = dict()
+    sum_values = []
+    if ms:
+        for m in ms:
+            sl = json.loads(m.status_list)
+            status_list_dict = dict()
+            sld = status_list_dict
+            sls = []
+            for fw in format_weeks:
+                if fw in sl.keys():
+                    sld[fw] = sl[fw]
+                    sls.append(sl[fw])
+                else:
+                    sld[fw] = 0
+                    sls.append(0)
+            sl_dict[m.id] = sls
+            print("sls", sls)
+            sum_dict[m.id] = sum(sls)
+            achieved_dict[m.id] = int(int(m.aim) * len(weeks) * 4 / 7)
+            print("in sys", sl_dict)
+        print("out sys", sl_dict)
 
-        sl = json.loads(m.status_list)
-        status_list_dict = dict()
-        sld = status_list_dict
-        sls = []
-        for fw in format_weeks:
-            if fw in sl.keys():
-                sld[fw] = sl[fw]
-                sls.append(sl[fw])
-            else:
-                sld[fw] = 0
-                sls.append(0)
-        sl_dict[m.id] = sls
+        ss = sl_dict
+        sum_values = sum_lists(list(ss.values()))
+        print("out sys", sl_dict)
 
-    print("sl_dict.values()",type(sl_dict.values()),sl_dict.values())
-    sum_values = sum_lists(list(sl_dict.values()))
-
-    print(sum_values)
-
+    print("sl_dict", sl_dict)
     # sl_dict = json.dumps(sl_dict)
     # print(sl_dict)
-    fw = list(map(lambda x: x[5:], format_weeks))
+    # fw = list(map(lambda x: x[5:], format_weeks))
     return render_template('task/indexx.html', task_list=ms, sum_values=sum_values, user=u, weeks=format_weeks,
-                           status_lists=sl_dict)
+                           status_lists=sl_dict, achieved_dict=achieved_dict, sum_dict=sum_dict)
 
 
 @main.route('/profile')
@@ -130,6 +138,7 @@ def init():
 @main.route('/go/<id>', methods=['GET'])
 def go(id):
     w = Task.query.get(id)
+    print("w", w)
     # u = current_user()
     # print('w', w)
     temp = json.loads(w.status_list)

@@ -1,22 +1,23 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css" >
-    <!--<script src="/static/js/api.js"></script>-->
-
-    <title>◢₄₆Life goes on</title>
-  </head>
-  <body>
-
+    <link rel="stylesheet" href="/static/css/bootstrap.css" >
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="/static/js/bootstrap.min.js"  ></script>
+    <script src="/static/js/bootstrap.js"  ></script>
+    <script src="/static/js/jquery.min.js"  ></script>
+
+      <title>◢₄₆Life goes on</title>
+  </head>
+  <body>
+
     <div class="container">
         <div>
             <h3  align="center"> ◢₄₆ </h3>
@@ -30,13 +31,25 @@
      <br><br><br>
 
 
+    <div>
+    {% for t in task_list %}
+        <span class="label label-pill label-success">   {{t.name}} </span>
+
+        <span class="label label-pill label-success">  {{sum_dict[t.id]}} / {{achieved_dict[t.id]}}</span>
+&nbsp;&nbsp;
+
+    {% endfor %}
+</div>
+
+
 
   <div  class="table-responsive-sm">
-    <table class="table table-dark">
+    <table class="table table-inverse">
   <thead>
+
     <tr>
       <th scope="col"   colspan="8">
-        <button class="btn btn-secondary active" onClick="location.href='{{ url_for('.index') }}'">
+        <button class="btn btn-primary" onClick="location.href='{{ url_for('.index') }}'">
              {{weeks[0][:7]}}
             </button>
        </th>
@@ -44,40 +57,46 @@
       <td scope="col" >{{w[8:]}}</td>
        {% endfor %}
     </tr>
+
+
   </thead>
+
+
   <tbody>
 
   {% for task in task_list %}
     <tr>
        <th scope="row"  colspan="8">
 
-            <button class="btn  btn-sm btn-info  " onClick="location.href='{{ url_for('.go', id=task.id) }}'">
+            <button class="btn  btn-sm btn-success " onClick="location.href='{{ url_for('.go', id=task.id) }}'">
              「{{task.aim}}」{{task.name}}  +
             </button>
        </th>
 
-
-
-        {% for status in status_lists[task.id] %}
+       {% for status in status_lists[task.id] %}
           <td >
               {{ status }}
           </td>
-        {% endfor %}
+       {% endfor %}
 
     </tr>
   {% endfor %}
-        <tr>
-         <th scope="row"  colspan="8">
 
-            {% for sv in sum_values %}
+
+
+  <tr>
+    <th scope="row"  colspan="8">
+
+      {% for sv in sum_values %}
           <td >
               {{ sv }}
           </td>
-        {% endfor %}
-       </th>
+      {% endfor %}
+
+   </th>
+  </tr>
 
 
-</tr>
   </tbody>
 </table>
 

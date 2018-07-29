@@ -63,6 +63,9 @@ def register_routes(app):
     from routes.task import main as routes_task
     app.register_blueprint(routes_task, url_prefix='/task')
 
+    from routes.index import main as routes_index
+    app.register_blueprint(routes_index)
+
     # from routes.task import main as routes_task
     # app.register_blueprint(routes_task, url_prefix='/')
 
