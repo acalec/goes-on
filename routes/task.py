@@ -2,7 +2,8 @@ from models.task import Task
 from routes import *
 from utils.utils import log
 import json
-import datetime, calendar
+import datetime
+import calendar
 from routes.user import current_user, login_check
 from utils.for_task import sum_lists
 
@@ -73,8 +74,15 @@ def index():
     # sl_dict = json.dumps(sl_dict)
     # print(sl_dict)
     # fw = list(map(lambda x: x[5:], format_weeks))
-    return render_template('task/indexx.html', task_list=ms, sum_values=sum_values, user=u, weeks=format_weeks,
-                           status_lists=sl_dict, achieved_dict=achieved_dict, sum_dict=sum_dict)
+    return render_template(
+        'task/indexx.html',
+        task_list=ms,
+        sum_values=sum_values,
+        user=u,
+        weeks=format_weeks,
+        status_lists=sl_dict,
+        achieved_dict=achieved_dict,
+        sum_dict=sum_dict)
 
 
 @main.route('/profile')
@@ -129,7 +137,12 @@ def init():
     t = Model.query.get(id)
     c = t.status_list
     log("C", c, type(c), json.loads(c), type(json.loads(c)))
-    d = {'2018-07-01': '2', '2018-07-02': '4', '2018-07-04': '1', '2018-07-03': '2', }
+    d = {
+        '2018-07-01': '2',
+        '2018-07-02': '4',
+        '2018-07-04': '1',
+        '2018-07-03': '2',
+    }
     d = json.dumps(d)
     t.status_list = str(d)
     t.save()
